@@ -9,34 +9,26 @@ import androidx.room.PrimaryKey;
 
 import java.util.Date;
 
-@Entity(tableName = "task", indices = {@Index(value = {"status_name"}, unique = true)}
-, foreignKeys = {@ForeignKey(entity = StatusEntity.class, parentColumns = "id", childColumns = "status_id", onDelete = ForeignKey.CASCADE),
-@ForeignKey(entity = UserEntity.class, parentColumns = "id", childColumns = "user_id", onDelete = ForeignKey.CASCADE),
-        @ForeignKey(entity = RoomEntity.class, parentColumns = "id", childColumns = "room_id", onDelete = ForeignKey.CASCADE)})
+@Entity(tableName = "tasks", indices = {@Index(value = {"header"}, unique = true)}
+        , foreignKeys = {@ForeignKey(entity = RoomEntity.class, parentColumns = "idRoom", childColumns = "idRoom", onDelete = ForeignKey.CASCADE)})
 public class TaskEntity {
     @PrimaryKey
-    public int taskId;
+    public int idTask;
 
-    @ColumnInfo(name = "task_header")
+    @ColumnInfo(name = "idRoom", index = true)
+    public int idRoom;
+
+    @ColumnInfo(name = "header")
     @NonNull
-    public String taskHeader = "";
+    public String header = "";
 
-    @ColumnInfo(name = "task_body")
-    public String taskBody = "";
+    @ColumnInfo(name = "body")
+    public String body = "";
 
-    @ColumnInfo(name = "start_date")
+    @ColumnInfo(name = "deadline")
     @NonNull
-    public Date startDate = new Date();
+    public Date deadline = new Date();
 
-    @ColumnInfo(name = "end_date")
-    public Date endDate;
-
-    @ColumnInfo(name = "status_id", index = true)
-    public int statusId;
-
-    @ColumnInfo(name = "user_id", index = true)
-    public int userId;
-
-    @ColumnInfo(name = "room_id", index = true)
-    public int roomId;
+    @ColumnInfo(name = "status")
+    public int status;
 }

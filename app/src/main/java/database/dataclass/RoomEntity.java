@@ -6,12 +6,12 @@ import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "user", indices = {@Index(value = {"room_name"}, unique = true)})
+@Entity(tableName = "rooms", indices = {@Index(value = {"name"}, unique = true)})
 public class RoomEntity {
     @PrimaryKey
-    public int room_id;
+    public int idRoom;
 
-    @ColumnInfo(name = "room_name")
+    @ColumnInfo(name = "name")
     @NonNull
-    public String roomName = "";
+    public String name = "";
 }
