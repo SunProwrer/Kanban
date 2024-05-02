@@ -3,8 +3,8 @@ package backend;
 import java.util.List;
 
 public class MainActivityBackend {
-    Room room;
-    List<AbstrctTask> tasks;
+    //Room room;
+    //List<AbstractTask> tasks;
 
     public void onCreate() {
         loadTasks();

@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">Kanban</string>
+
+    <string name="error_msg_user_already_existed">Пользователь с данным логином\nуже существует!</string>
+    <string name="error_msg_incorrect_login_or_password">Неверный пароль\nили логин!</string>
+
+    <string name="auth_label_login">Логин</string>
+    <string name="auth_label_password">Пароль</string>
+    <string name="auth_button_log_in">Войти</string>
+    <string name="auth_button_registration">Зарегистрироваться</string>
+
+    <string name="room_label_name_room">Название комнаты</string>
+    <string name="room_button_room_settings">Настройки комнаты</string>
+    <string name="room_button_todo">Бэклог\n(%d)</string>
+    <string name="room_button_doing">Делается\n(%d)</string>
+    <string name="room_button_done">Готово\n(%d)</string>
+    <string name="room_label_name_new_task">Заголовок новой задачи</string>
+    <string name="room_button_add_new_task">Добавить</string>
 </resources>
