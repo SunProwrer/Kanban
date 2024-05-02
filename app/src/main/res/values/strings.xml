@@ -3,6 +3,7 @@
 
     <string name="error_msg_user_already_existed">Пользователь с данным логином\nуже существует!</string>
     <string name="error_msg_incorrect_login_or_password">Неверный пароль\nили логин!</string>
+    <string name="error_msg_user_already_in_room">Данный участник уже есть в комнате</string>
 
     <string name="auth_label_login">Логин</string>
     <string name="auth_label_password">Пароль</string>
@@ -16,4 +17,17 @@
     <string name="room_button_done">Готово\n(%d)</string>
     <string name="room_label_name_new_task">Заголовок новой задачи</string>
     <string name="room_button_add_new_task">Добавить</string>
+
+    <string name="rooms_label_login">Логин: логин</string>
+    <string name="rooms_label_room_list">Список комнат:</string>
+    <string name="rooms_input_new_room">Заголовок новой комнаты</string>
+    <string name="rooms_button_add_room">Добавить</string>
+    <string name="room_settings_button_edit_room_name">Применить</string>
+    <string name="room_settings_label_users_list">Список участников:</string>
+    <string name="room_settings_input_new_user">Логин нового участника</string>
+    <string name="room_settings_button_add_user">Добавить</string>
+    <string name="room_settings_button_delete_room">Удалить комнату</string>
+    <string name="task_label_task_head">Заголовок задачи</string>
+    <string name="task_button_change_task">Изменить</string>
+    <string name="task_button_delete_task">Удалить</string>
 </resources>
