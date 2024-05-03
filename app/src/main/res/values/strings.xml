@@ -27,7 +27,13 @@
     <string name="room_settings_input_new_user">Логин нового участника</string>
     <string name="room_settings_button_add_user">Добавить</string>
     <string name="room_settings_button_delete_room">Удалить комнату</string>
+
     <string name="task_label_task_head">Заголовок задачи</string>
     <string name="task_button_change_task">Изменить</string>
     <string name="task_button_delete_task">Удалить</string>
+
+    <string name="task_change_button_save">Сохранить</string>
+    <string name="task_change_button_cancel">Отменить</string>
+    <string name="task_change_input_task_body">Описание</string>
+    <string name="task_change_input_task_head">Заголовок задачи</string>
 </resources>

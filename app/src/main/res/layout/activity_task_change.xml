@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Task">
+    tools:context=".TaskChange">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -13,19 +13,19 @@
         android:orientation="vertical"
         android:layout_marginHorizontal="10dp"
         android:layout_marginVertical="4dp">
-        <TextView
-            android:id="@+id/label_taskHead"
+        <EditText
+            android:id="@+id/input_taskHead"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
             android:textSize="40sp"
-            tools:text="Заголовок задачи"/>
+            android:hint="@string/task_change_input_task_head"/>
         <RelativeLayout
             android:id="@+id/layout_status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/label_taskHead"
+            android:layout_below="@+id/input_taskHead"
             android:orientation="horizontal">
             <Button
                 android:id="@+id/button_prev_status"
@@ -49,27 +49,40 @@
                 android:layout_alignParentEnd="true"
                 android:background="@drawable/baseline_arrow_right_24"/>
         </RelativeLayout>
-        <TextView
-            android:id="@+id/label_deadline"
+        <LinearLayout
+            android:id="@+id/layout_deadline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/layout_status"
-            android:textSize="28sp"
-            tools:text="Осталось: 3 дня"/>
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="28sp"
+                tools:text="Дедлайн:"/>
+            <EditText
+                android:id="@+id/input_deadline"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:inputType="date"
+                android:textSize="24sp"
+                tools:text="12.04.2024"/>
+        </LinearLayout>
         <LinearLayout
             android:id="@+id/layout_taskBody"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/label_deadline"
+            android:layout_below="@+id/layout_deadline"
             android:layout_above="@+id/layout_buttons"
             android:isScrollContainer="true"
             android:orientation="vertical">
-            <TextView
-                android:id="@+id/label_taskBody"
+            <EditText
+                android:id="@+id/input_taskBody"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="28sp"
-                tools:text="Описание"/>
+                android:inputType="textMultiLine"
+                android:hint="@string/task_change_input_task_body"/>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/layout_buttons"
@@ -80,19 +93,19 @@
             android:orientation="horizontal"
             android:weightSum="2">
             <Button
-                android:id="@+id/button_changeTask"
+                android:id="@+id/button_saveTask"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_weight="1"
                 android:layout_margin="4dp"
-                android:text="@string/task_button_change_task"/>
+                android:text="@string/task_change_button_save"/>
             <Button
-                android:id="@+id/button_deleteTask"
+                android:id="@+id/button_cancel"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_weight="1"
                 android:layout_margin="4dp"
-                android:text="@string/task_button_delete_task"/>
+                android:text="@string/task_change_button_cancel"/>
         </LinearLayout>
     </RelativeLayout>
 
