@@ -19,6 +19,12 @@ public interface KanbanDao {
     @Query("SELECT * FROM users")
     LiveData<List<UserEntity>> getUsers();
 
+    @Query("SELECT EXISTS(SELECT idUser FROM users WHERE login = :login AND password = :password)")
+    boolean checkUserByLoginAndPassword(String login, String password);
+
+    @Query("SELECT EXISTS(SELECT idUser FROM users WHERE login = :login)")
+    boolean checkUserByLogin(String login);
+
     @Update
     void updateUser(UserEntity user);
 

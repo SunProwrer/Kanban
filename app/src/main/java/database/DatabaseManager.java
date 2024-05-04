@@ -9,6 +9,8 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.concurrent.Executors;
 
+import database.dao.KanbanDao;
+
 public class DatabaseManager {
     private DatabaseHelper db;
     private static DatabaseManager instance;
@@ -34,7 +36,11 @@ public class DatabaseManager {
                 .build();
     }
     private void initData(Context context){
+        KanbanDao kanbanDao = DatabaseManager.getInstance(context).getKanbanDao();
+    }
 
+    public KanbanDao getKanbanDao(){
+        return db.kanbanDao();
     }
 }
 

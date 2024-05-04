@@ -5,6 +5,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
 import database.converters.Converters;
+import database.dao.KanbanDao;
 import database.dataclass.RoomEntity;
 import database.dataclass.AccessEntity;
 import database.dataclass.TaskEntity;
@@ -14,5 +15,6 @@ import database.dataclass.UserEntity;
 @TypeConverters({Converters.class})
 public abstract class DatabaseHelper extends RoomDatabase {
     public static final String DATABASE_NAME = "kanban";
+    public abstract KanbanDao kanbanDao();
 
 }
