@@ -10,6 +10,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import java.util.concurrent.Executors;
 
 import database.dao.KanbanDao;
+import database.dataclass.UserEntity;
 
 public class DatabaseManager {
     private DatabaseHelper db;
@@ -37,6 +38,11 @@ public class DatabaseManager {
     }
     private void initData(Context context){
         KanbanDao kanbanDao = DatabaseManager.getInstance(context).getKanbanDao();
+
+        UserEntity user = new UserEntity();
+        user.password = "d";
+        user.login = "d";
+        kanbanDao.insertUser(user);
     }
 
     public KanbanDao getKanbanDao(){

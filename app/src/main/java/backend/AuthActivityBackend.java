@@ -12,16 +12,17 @@ import database.dataclass.UserEntity;
 
 public class AuthActivityBackend {
     private Activity activity;
-    private Context context;
+    private final Context context;
+    private final KanbanDao kanbanDao;
     private String login;
     private String password;
-    private KanbanDao kanbanDao;
 
-    private String getLogin(){
-        return login;
-    }
-    private String getPassword(){
-        return password;
+    public AuthActivityBackend(Context _context, KanbanDao _kanbanDao){
+        context = _context;
+        kanbanDao = _kanbanDao;
+
+        login = "";
+        password = "";
     }
     public void setLogin(String _login){
         login = _login;
@@ -31,12 +32,17 @@ public class AuthActivityBackend {
         password = _password;
     }
 
-    public AuthActivityBackend(Context _context, KanbanDao _kanbanDao){
-        context = _context;
-        kanbanDao = _kanbanDao;
+    private String getLogin(){
+        return login;
+    }
+    private String getPassword(){
+        return password;
     }
 
     public void logIn(){
+        if (loginOrPasswordIsEmpty())
+            return;
+
         if (Checker.checkLoginAndPassword(kanbanDao, login, password)){
             goToRooms();
         }
@@ -44,7 +50,11 @@ public class AuthActivityBackend {
             // TODO message
         }
     }
+
     public void register(){
+        if (loginOrPasswordIsEmpty())
+            return;
+
         if (!Checker.checkLogin(kanbanDao, login)){
             createUser();
             goToRooms();
@@ -52,6 +62,10 @@ public class AuthActivityBackend {
         else{
             // TODO message
         }
+    }
+
+    private boolean loginOrPasswordIsEmpty() {
+        return login.isEmpty() || password.isEmpty();
     }
 
     private void goToRooms(){
