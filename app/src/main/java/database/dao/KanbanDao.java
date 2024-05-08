@@ -28,7 +28,7 @@ public interface KanbanDao {
     @Update
     void updateUser(UserEntity user);
 
-    @Insert
+    @Insert(entity = UserEntity.class)
     void insertUser(UserEntity user);
 
     @Delete
