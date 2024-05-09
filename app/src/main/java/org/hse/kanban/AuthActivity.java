@@ -14,9 +14,12 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import backend.AuthActivityBackend;
+import database.DatabaseHelper;
 import database.DatabaseManager;
 import database.dao.KanbanDao;
 import database.dataclass.UserEntity;
@@ -28,6 +31,7 @@ public class AuthActivity extends AppCompatActivity {
     private EditText passwordLabel;
     private Button logInButton;
     private Button registerButton;
+    private DatabaseManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +46,22 @@ public class AuthActivity extends AppCompatActivity {
 
         initElements();
         setHandlers();
+
+//        UserEntity user = new UserEntity();
+//        user.login = "l";
+//        user.password = "p";
+//        List<UserEntity> users = new ArrayList<>();
+//        users.add(user);
+//        kanbanDao.insertUsers(users);
+
+        seeDatabase();
+        insertAnExample();
+        seeDatabase();
     }
 
     private void initElements(){
-        kanbanDao = DatabaseManager.getInstance(this).getKanbanDao();
+        manager = DatabaseManager.getInstance(this);
+        kanbanDao = manager.getKanbanDao();
         backend = new AuthActivityBackend(this, kanbanDao);
 
         loginLabel = findViewById(R.id.input_login);
@@ -85,4 +101,27 @@ public class AuthActivity extends AppCompatActivity {
 
         registerButton.setOnClickListener(v -> backend.register());
     }
+
+    private void seeDatabase() {
+        List<UserEntity> users = kanbanDao.getUsers();
+
+        if (users == null) {
+            Log.i(TAG, "null result");
+        } else {
+            Log.i(TAG, String.valueOf(users.size()));
+        }
+    }
+
+    private void insertAnExample() {
+        try {
+            UserEntity user = new UserEntity();
+            user.password = "password";
+            user.login = "login";
+            kanbanDao.insertUser(user);
+        } catch (Exception ex) {
+            Log.i(TAG, "This user was already added");
+        }
+    }
+
+    private final String TAG = "AuthActivity";
 }

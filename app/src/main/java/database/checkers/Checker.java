@@ -1,12 +1,16 @@
 package database.checkers;
 
+import java.util.List;
+
 import database.dao.KanbanDao;
 
 public class Checker {
     public static boolean checkLoginAndPassword(KanbanDao kanbanDao, String login, String password){
-        return kanbanDao.checkUserByLoginAndPassword(login, password) != null;
+        List<Integer> result = kanbanDao.checkUserByLoginAndPassword(login, password);
+        return result != null && !result.isEmpty();
     }
     public static boolean checkLogin(KanbanDao kanbanDao, String login){
-        return kanbanDao.checkUserByLogin(login) != null;
+        List<Integer> result = kanbanDao.checkUserByLogin(login);
+        return result != null && !result.isEmpty();
     }
 }
