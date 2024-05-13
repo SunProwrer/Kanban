@@ -8,7 +8,8 @@ import androidx.room.PrimaryKey;
 
 @Entity(tableName = "users")//, indices = {@Index(value = {"login"}, unique = true)})
 public class UserEntity {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "idUser")
     public int idUser;
 
     @ColumnInfo(name = "login")
@@ -18,4 +19,14 @@ public class UserEntity {
     @ColumnInfo(name = "password")
     @NonNull
     public String password = "";
+
+    public UserEntity(String _login, String _password){
+        login = _login;
+        password = _password;
+    }
+
+    public UserEntity(){
+        login = "";
+        password = "";
+    }
 }
