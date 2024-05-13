@@ -22,6 +22,7 @@ import backend.AuthActivityBackend;
 import database.DatabaseHelper;
 import database.DatabaseManager;
 import database.dao.KanbanDao;
+import database.dataclass.AccessEntity;
 import database.dataclass.UserEntity;
 
 public class AuthActivity extends AppCompatActivity {
@@ -53,9 +54,15 @@ public class AuthActivity extends AppCompatActivity {
 //        users.add(user);
 //        kanbanDao.insertUsers(users);
 
-        seeDatabase();
-        insertAnExample();
-        seeDatabase();
+//        AccessEntity access = new AccessEntity();
+//        access.role = AccessEntity.OWNER;
+//        access.idRoom = 1;
+//        access.idUser = 4;
+//        kanbanDao.insertAccess(access);
+
+//        seeDatabase();
+//        insertAnExample();
+//        seeDatabase();
     }
 
     private void initElements(){

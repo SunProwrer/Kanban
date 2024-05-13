@@ -12,7 +12,7 @@ import java.util.Date;
 @Entity(tableName = "tasks", indices = {@Index(value = {"header"}, unique = true)}
         , foreignKeys = {@ForeignKey(entity = RoomEntity.class, parentColumns = "idRoom", childColumns = "idRoom", onDelete = ForeignKey.CASCADE)})
 public class TaskEntity {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     public int idTask;
 
     @ColumnInfo(name = "idRoom", index = true)

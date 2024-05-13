@@ -9,6 +9,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class RoomActivity extends AppCompatActivity {
+    public static final String USER = "extra_user_id";
+    public static final String ROOM = "extra_room_id";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,5 +22,18 @@ public class RoomActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    private void initElements() {
+
+    }
+
+    private void getDataFromIntent() {
+        Bundle extras = getIntent().getExtras();
+        if (extras == null) {
+            return;
+        }
+        extras.getInt(USER);
+        extras.getInt(ROOM);
     }
 }

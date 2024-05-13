@@ -41,8 +41,11 @@ public interface KanbanDao {
     @Query("SELECT * FROM rooms")
     List<RoomEntity> getRooms();
 
-    @Query("SELECT * FROM ROOMS WHERE idRoom IN (SELECT idRoom FROM access WHERE idUser = :idUser)")
+    @Query("SELECT * FROM rooms WHERE idRoom IN (SELECT idRoom FROM access WHERE idUser = :idUser)")
     List<RoomEntity> getRoomsByUserId(long idUser);
+
+    @Query("Select * FROM rooms WHERE name = :name")
+    List<RoomEntity> getRoomByName(String name);
 
     @Update
     void updateRoom(RoomEntity room);

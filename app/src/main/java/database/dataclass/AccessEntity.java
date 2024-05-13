@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey;
 
 @Entity(tableName = "access", foreignKeys = {@ForeignKey(entity = UserEntity.class, parentColumns = "idUser", childColumns = "idUser", onDelete = ForeignKey.CASCADE),@ForeignKey(entity = RoomEntity.class, parentColumns = "idRoom", childColumns = "idRoom", onDelete = ForeignKey.CASCADE)})
 public class AccessEntity {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     public int idAccess;
 
     @ColumnInfo(name = "idRoom", index = true)
@@ -20,4 +20,7 @@ public class AccessEntity {
 
     @ColumnInfo(name = "role")
     public int role;
+
+    public static int OWNER = 1;
+    public static int CASUAL = 0;
 }
