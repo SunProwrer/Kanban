@@ -18,19 +18,22 @@ import database.dataclass.UserEntity;
 @Dao
 public interface KanbanDao {
     @Query("SELECT * FROM users")
-    LiveData<List<UserEntity>> getUsers();
+    List<UserEntity> getUsers();
 
     @Query("SELECT idUser FROM users WHERE login = :login AND password = :password")
-    LiveData<List<Integer>> checkUserByLoginAndPassword(String login, String password);
+    List<Integer> checkUserByLoginAndPassword(String login, String password);
 
     @Query("SELECT idUser FROM users WHERE login = :login")
-    LiveData<List<Integer>> checkUserByLogin(String login);
+    List<Integer> checkUserByLogin(String login);
 
     @Update
     void updateUser(UserEntity user);
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE, entity = UserEntity.class)
     void insertUser(UserEntity user);
+
+    @Insert
+    void insertUsers(List<UserEntity> user);
 
     @Delete
     void deleteUser(UserEntity user);

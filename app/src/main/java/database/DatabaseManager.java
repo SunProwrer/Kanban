@@ -13,7 +13,7 @@ import database.dao.KanbanDao;
 import database.dataclass.UserEntity;
 
 public class DatabaseManager {
-    private DatabaseHelper db;
+    private final DatabaseHelper db;
     private static DatabaseManager instance;
     public static DatabaseManager getInstance(Context context){
         if (instance == null){
@@ -34,6 +34,7 @@ public class DatabaseManager {
                         });
                     }
                 })
+                .allowMainThreadQueries()
                 .build();
     }
     private void initData(Context context){

@@ -8,15 +8,12 @@ import java.util.List;
 import database.dao.KanbanDao;
 
 public class Checker {
-    private static <T> boolean checkCollectionIsNotNullOrEmpty(Collection<T> ld){
-        return ld != null && !ld.isEmpty();
-    }
     public static boolean checkLoginAndPassword(KanbanDao kanbanDao, String login, String password){
-        List<Integer> ld = kanbanDao.checkUserByLoginAndPassword(login, password).getValue();
-        return Checker.<Integer>checkCollectionIsNotNullOrEmpty(ld);
+        List<Integer> result = kanbanDao.checkUserByLoginAndPassword(login, password);
+        return result != null && !result.isEmpty();
     }
     public static boolean checkLogin(KanbanDao kanbanDao, String login){
-        List<Integer> ld = kanbanDao.checkUserByLogin(login).getValue();
-        return Checker.<Integer>checkCollectionIsNotNullOrEmpty(ld);
+        List<Integer> result = kanbanDao.checkUserByLogin(login);
+        return result != null && !result.isEmpty();
     }
 }
