@@ -20,6 +20,9 @@ public interface KanbanDao {
     @Query("SELECT * FROM users")
     List<UserEntity> getUsers();
 
+    @Query("SELECT * FROM users WHERE idUser = :idUser")
+    List<UserEntity> getUserById(long idUser);
+
     @Query("SELECT * FROM users WHERE login = :login AND password = :password")
     List<UserEntity> getUserByLoginAndPassword(String login, String password);
 
@@ -40,6 +43,9 @@ public interface KanbanDao {
 
     @Query("SELECT * FROM rooms")
     List<RoomEntity> getRooms();
+
+    @Query("SELECT * FROM rooms WHERE idRoom = :idRoom")
+    List<RoomEntity> getRoomById(long idRoom);
 
     @Query("SELECT * FROM rooms WHERE idRoom IN (SELECT idRoom FROM access WHERE idUser = :idUser)")
     List<RoomEntity> getRoomsByUserId(long idUser);
@@ -67,6 +73,15 @@ public interface KanbanDao {
 
     @Query("SELECT * FROM tasks")
     LiveData<List<TaskEntity>> getTask();
+
+    @Query("SELECT * FROM tasks WHERE idTask = :idTask")
+    List<TaskEntity> getTaskById(long idTask);
+
+    @Query("SELECT * FROM tasks WHERE header = :header AND idRoom = :idRoom")
+    List<TaskEntity> getTaskByHeaderAndIdRoom(String header, long idRoom);
+
+    @Query("SELECT * FROM tasks WHERE idRoom = :idRoom AND status = :status")
+    List<TaskEntity> getTasksByIdRoomAndStatus(long idRoom, int status);
 
     @Update
     void updateTask(TaskEntity task);

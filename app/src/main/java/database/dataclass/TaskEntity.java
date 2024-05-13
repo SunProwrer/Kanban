@@ -31,4 +31,8 @@ public class TaskEntity {
 
     @ColumnInfo(name = "status")
     public int status;
+
+    public static int TODO = 0;
+    public static int DOING = 1;
+    public static int DONE = 2;
 }

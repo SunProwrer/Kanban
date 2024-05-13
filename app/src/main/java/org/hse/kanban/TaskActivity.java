@@ -9,6 +9,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class TaskActivity extends AppCompatActivity {
+    public static final String ROOM = "extra_room_id";
+    public static final String TASK = "extra_task_id";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
