@@ -83,6 +83,9 @@ public interface KanbanDao {
     @Query("SELECT * FROM tasks WHERE idRoom = :idRoom AND status = :status")
     List<TaskEntity> getTasksByIdRoomAndStatus(long idRoom, int status);
 
+    @Query("SELECT * FROM tasks WHERE header = :header")
+    List<TaskEntity> getTaskByHeader(String header);
+
     @Update
     void updateTask(TaskEntity task);
 

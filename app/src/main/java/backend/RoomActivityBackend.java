@@ -25,16 +25,16 @@ public class RoomActivityBackend {
     private TaskAdapter adapter;
     private String headerOfNewTask = "";
     private int status = TaskEntity.TODO;
-    public RoomActivityBackend(Context _context, KanbanDao _kanbanDao, long idUser, long idRoom){
+    public RoomActivityBackend(Context _context, KanbanDao _kanbanDao, String login, String name){
         context = _context;
         kanbanDao = _kanbanDao;
-        user = kanbanDao.getUserById(idUser).get(0);
-        room = kanbanDao.getRoomById(idRoom).get(0);
+        user = kanbanDao.getUserByLogin(login).get(0);
+        room = kanbanDao.getRoomByName(name).get(0);
         initTasksList();
         createAdapter();
     }
 
-    public String getNameOfRoom(){ return room.name; }
+    public String getNameOfRoom() { return room.name; }
 
     public void setHeaderOfNewTask(String header) {
         headerOfNewTask = header;
@@ -55,9 +55,11 @@ public class RoomActivityBackend {
         }
         TaskEntity newTask = new TaskEntity();
         newTask.header = headerOfNewTask;
+        newTask.idRoom = room.idRoom;
+        newTask.status = status;
         kanbanDao.insertTask(newTask);
 
-        initTasksList();
+        addNewTaskToList(headerOfNewTask);
         updateAdapter();
     }
 
@@ -68,15 +70,31 @@ public class RoomActivityBackend {
         context.startActivity(intent);
     }
 
+    public void changeStatusToTODO() {
+        status = TaskEntity.TODO;
+    }
+
+    public void changeStatusToDOING() {
+        status = TaskEntity.DOING;
+    }
+
+    public void changeStatusToDONE() {
+        status = TaskEntity.DONE;
+    }
+
     private void initTasksList() {
-        tasks = kanbanDao.getTasksByIdRoomAndStatus(user.idUser, status);
+        tasks = kanbanDao.getTasksByIdRoomAndStatus(room.idRoom, status);
+    }
+
+    private void addNewTaskToList(String header) {
+        tasks.add(kanbanDao.getTaskByHeader(header).get(0));
     }
 
     private void createAdapter() {
         adapter = new TaskAdapter(context, tasks);
     }
 
-    private void updateAdapter() { //TODO неработайт((((9(
+    private void updateAdapter() {
         adapter.notifyItemInserted(tasks.size() - 1);
     }
 }

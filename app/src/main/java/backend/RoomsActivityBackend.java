@@ -68,14 +68,14 @@ public class RoomsActivityBackend {
         access.idUser = user.idUser;
         access.role = AccessEntity.OWNER;
         kanbanDao.insertAccess(access);
-        initRoomsList();
+        addRoomToList(nameOfNewRoom);
         updateAdapter();
     }
 
     public void goToRoom(int index) {
         Intent intent = new Intent(context, RoomActivity.class);
-        intent.putExtra(RoomActivity.USER, user.idUser);
-        intent.putExtra(RoomActivity.ROOM, rooms.get(index).idRoom);
+        intent.putExtra(RoomActivity.USER, user.login);
+        intent.putExtra(RoomActivity.ROOM, rooms.get(index).name);
         context.startActivity(intent);
     }
 
@@ -83,11 +83,15 @@ public class RoomsActivityBackend {
         rooms = kanbanDao.getRoomsByUserId(user.idUser);
     }
 
+    private void addRoomToList(String name) {
+        rooms.add(kanbanDao.getRoomByName(name).get(0));
+    }
+
     private void createAdapter() {
         adapter = new RoomAdapter(context, rooms);
     }
 
-    private void updateAdapter() { //TODO неработайт((((9(
+    private void updateAdapter() {
         adapter.notifyItemInserted(rooms.size() - 1);
     }
 }

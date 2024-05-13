@@ -3,6 +3,7 @@ package org.hse.kanban;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,6 +27,7 @@ import database.dao.KanbanDao;
 public class RoomActivity extends AppCompatActivity {
     public static final String USER = "extra_user_id";
     public static final String ROOM = "extra_room_id";
+    private static final String TAG = "RoomActivity";
     RoomActivityBackend backend;
     KanbanDao kanbanDao;
     TextView nameOfRoomLabel;
@@ -62,14 +64,14 @@ public class RoomActivity extends AppCompatActivity {
         addTaskButton = findViewById(R.id.button_addTask);
     }
 
-    private long getIdUser() {
+    private String getIdUser() {
         Bundle extras = getIntent().getExtras();
-        return extras.getLong(USER);
+        return extras.getString(USER);
     }
 
-    private long getIdRoom() {
+    private String getIdRoom() {
         Bundle extras = getIntent().getExtras();
-        return extras.getLong(ROOM);
+        return extras.getString(ROOM);
     }
 
     private void setHandlers() {
