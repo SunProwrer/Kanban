@@ -18,7 +18,7 @@
     <string name="room_label_name_new_task">Заголовок новой задачи</string>
     <string name="room_button_add_new_task">Добавить</string>
 
-    <string name="rooms_label_login">Логин: логин</string>
+    <string name="rooms_label_login">Логин:</string>
     <string name="rooms_label_room_list">Список комнат:</string>
     <string name="rooms_input_new_room">Заголовок новой комнаты</string>
     <string name="rooms_button_add_room">Добавить</string>
