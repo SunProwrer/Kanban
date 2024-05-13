@@ -60,7 +60,6 @@ public class RoomActivityBackend {
         kanbanDao.insertTask(newTask);
 
         addNewTaskToList(headerOfNewTask);
-        updateAdapter();
     }
 
     public void goToTask(int index) {
@@ -72,14 +71,29 @@ public class RoomActivityBackend {
 
     public void changeStatusToTODO() {
         status = TaskEntity.TODO;
+        refreshTaskList();
     }
 
     public void changeStatusToDOING() {
         status = TaskEntity.DOING;
+        refreshTaskList();
     }
 
     public void changeStatusToDONE() {
         status = TaskEntity.DONE;
+        refreshTaskList();
+    }
+
+    public int getCountOfTODOTasks() {
+        return kanbanDao.getCountTasksByRoomAndStatus(room.idRoom, TaskEntity.TODO).get(0);
+    }
+
+    public int getCountOfDOINGTasks() {
+        return kanbanDao.getCountTasksByRoomAndStatus(room.idRoom, TaskEntity.DOING).get(0);
+    }
+
+    public int getCountOfDONETasks() {
+        return kanbanDao.getCountTasksByRoomAndStatus(room.idRoom, TaskEntity.DONE).get(0);
     }
 
     private void initTasksList() {
@@ -88,6 +102,13 @@ public class RoomActivityBackend {
 
     private void addNewTaskToList(String header) {
         tasks.add(kanbanDao.getTaskByHeader(header).get(0));
+        updateAdapter();
+    }
+
+    private void refreshTaskList() {
+        tasks.clear();
+        tasks.addAll(kanbanDao.getTasksByIdRoomAndStatus(room.idRoom, status));
+        hardUpdateAdapter();
     }
 
     private void createAdapter() {
@@ -96,5 +117,9 @@ public class RoomActivityBackend {
 
     private void updateAdapter() {
         adapter.notifyItemInserted(tasks.size() - 1);
+    }
+
+    private void hardUpdateAdapter() {
+        adapter.notifyDataSetChanged();
     }
 }

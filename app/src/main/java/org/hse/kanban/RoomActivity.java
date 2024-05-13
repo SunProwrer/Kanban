@@ -3,7 +3,6 @@ package org.hse.kanban;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import adapters.RecyclerItemClickListener;
 import backend.RoomActivityBackend;
-import backend.RoomsActivityBackend;
 import database.DatabaseManager;
 import database.dao.KanbanDao;
 
@@ -34,6 +32,9 @@ public class RoomActivity extends AppCompatActivity {
     EditText headerOfNewTask;
     RecyclerView recyclerView;
     Button addTaskButton;
+    Button switchToTODO;
+    Button switchToDOING;
+    Button switchToDONE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,7 @@ public class RoomActivity extends AppCompatActivity {
         });
 
         initElements();
+        setDataToViews();
         setHandlers();
     }
 
@@ -55,13 +57,30 @@ public class RoomActivity extends AppCompatActivity {
         backend = new RoomActivityBackend(this, kanbanDao, getIdUser(), getIdRoom());
 
         nameOfRoomLabel = findViewById(R.id.label_name);
-        nameOfRoomLabel.setText(backend.getNameOfRoom());
         headerOfNewTask = findViewById(R.id.input_newTask);
         recyclerView = findViewById(R.id.layout_tasks);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(backend.getAdapter());
         addTaskButton = findViewById(R.id.button_addTask);
+        switchToTODO = findViewById(R.id.button_todo);
+        switchToDOING = findViewById(R.id.button_doing);
+        switchToDONE = findViewById(R.id.button_done);
+    }
+
+    private void setDataToViews() {
+        nameOfRoomLabel.setText(backend.getNameOfRoom());
+        updateTextOnButtons();
+    }
+
+    private void updateTextOnButtons() {
+        switchToTODO.setText(getNameOfButton(R.string.room_button_todo, backend.getCountOfTODOTasks()));
+        switchToDOING.setText(getNameOfButton(R.string.room_button_doing, backend.getCountOfDOINGTasks()));
+        switchToDONE.setText(getNameOfButton(R.string.room_button_done, backend.getCountOfDONETasks()));
+    }
+
+    private String getNameOfButton(int msg, int count) {
+        return String.format(getString(msg), count);
     }
 
     private String getIdUser() {
@@ -90,6 +109,7 @@ public class RoomActivity extends AppCompatActivity {
 
         addTaskButton.setOnClickListener(v -> {
             backend.createNewTask();
+            updateTextOnButtons();
         });
 
         recyclerView.addOnItemTouchListener(
@@ -102,5 +122,9 @@ public class RoomActivity extends AppCompatActivity {
                     }
                 })
         );
+
+        switchToTODO.setOnClickListener(v -> backend.changeStatusToTODO());
+        switchToDOING.setOnClickListener(v -> backend.changeStatusToDOING());
+        switchToDONE.setOnClickListener(v -> backend.changeStatusToDONE());
     }
 }

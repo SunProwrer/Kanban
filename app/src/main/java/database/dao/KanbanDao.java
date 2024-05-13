@@ -95,5 +95,6 @@ public interface KanbanDao {
     @Delete
     void deleteTask(TaskEntity task);
 
-
+    @Query("SELECT COUNT(*) FROM tasks WHERE idRoom = :idRoom AND status = :status")
+    List<Integer> getCountTasksByRoomAndStatus(long idRoom, int status);
 }
