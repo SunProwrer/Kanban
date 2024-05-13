@@ -75,9 +75,9 @@ public class AuthActivityBackend {
     }
 
     private void createUser(){
-        UserEntity user = new UserEntity(this.login, this.password);
-//        user.login = login;
-//        user.password = password;
+        UserEntity user = new UserEntity();
+        user.login = login;
+        user.password = password;
         kanbanDao.insertUser(user);
     }
 }
