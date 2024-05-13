@@ -70,7 +70,7 @@ public class AuthActivityBackend {
 
     private void goToRooms(){
         Intent intent = new Intent(context, RoomsActivity.class);
-        intent.putExtra("login", login);
+        intent.putExtra(RoomsActivity.LOGIN, login);
         context.startActivity(intent);
     }
 

@@ -31,7 +31,6 @@ public class AuthActivity extends AppCompatActivity {
     private EditText passwordLabel;
     private Button logInButton;
     private Button registerButton;
-    private DatabaseManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +59,7 @@ public class AuthActivity extends AppCompatActivity {
     }
 
     private void initElements(){
-        manager = DatabaseManager.getInstance(this);
-        kanbanDao = manager.getKanbanDao();
+        kanbanDao = DatabaseManager.getInstance(this).getKanbanDao();
         backend = new AuthActivityBackend(this, kanbanDao);
 
         loginLabel = findViewById(R.id.input_login);
