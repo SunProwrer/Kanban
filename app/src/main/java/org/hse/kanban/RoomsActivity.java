@@ -43,9 +43,10 @@ public class RoomsActivity extends AppCompatActivity {
         backend = new RoomsActivityBackend(this, kanbanDao, getLogin());
 
         loginLabel = findViewById(R.id.label_login);
-        loginLabel.setText("Логин: " + backend.getLogin());
+        loginLabel.setText(backend.getLogin());
         nameOfNewRoom = findViewById(R.id.input_newRoom);
         recyclerView = findViewById(R.id.layout_rooms);
+        recyclerView.setAdapter(backend.getAdapter());
     }
 
     private String getLogin() {
