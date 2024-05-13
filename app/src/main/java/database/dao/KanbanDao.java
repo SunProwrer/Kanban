@@ -20,11 +20,11 @@ public interface KanbanDao {
     @Query("SELECT * FROM users")
     List<UserEntity> getUsers();
 
-    @Query("SELECT idUser FROM users WHERE login = :login AND password = :password")
-    List<Integer> checkUserByLoginAndPassword(String login, String password);
+    @Query("SELECT * FROM users WHERE login = :login AND password = :password")
+    List<UserEntity> getUserByLoginAndPassword(String login, String password);
 
-    @Query("SELECT idUser FROM users WHERE login = :login")
-    List<Integer> checkUserByLogin(String login);
+    @Query("SELECT * FROM users WHERE login = :login")
+    List<UserEntity> getUserByLogin(String login);
 
     @Update
     void updateUser(UserEntity user);
@@ -39,7 +39,7 @@ public interface KanbanDao {
     void deleteUser(UserEntity user);
 
     @Query("SELECT * FROM rooms")
-    LiveData<List<RoomEntity>> getRooms();
+    List<RoomEntity> getRooms();
 
     @Update
     void updateRoom(RoomEntity room);

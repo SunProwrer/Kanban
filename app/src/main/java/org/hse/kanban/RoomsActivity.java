@@ -34,15 +34,16 @@ public class RoomsActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        initElements();
     }
 
     private void initElements() {
         kanbanDao = DatabaseManager.getInstance(this).getKanbanDao();
-        String login = getLogin();
-        backend = new RoomsActivityBackend(this, kanbanDao, login);
+        backend = new RoomsActivityBackend(this, kanbanDao, getLogin());
 
         loginLabel = findViewById(R.id.label_login);
-        loginLabel.setText("Логин: " + login);
+        loginLabel.setText("Логин: " + backend.getLogin());
         nameOfNewRoom = findViewById(R.id.input_newRoom);
         recyclerView = findViewById(R.id.layout_rooms);
     }
