@@ -1,8 +1,6 @@
-package backend;
+package viewmodel;
 
-import java.util.List;
-
-public class MainActivityBackend {
+public class MainActivityViewModel {
     //Room room;
     //List<AbstractTask> tasks;
 

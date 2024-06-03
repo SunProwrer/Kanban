@@ -3,14 +3,12 @@ package org.hse.kanban;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -20,14 +18,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import adapters.RecyclerItemClickListener;
-import backend.RoomsActivityBackend;
-import database.DatabaseManager;
-import database.dao.KanbanDao;
+import viewmodel.RoomsActivityViewModel;
+import model.database.DatabaseManager;
+import model.database.dao.KanbanDao;
 
 public class RoomsActivity extends AppCompatActivity {
     public static final String LOGIN = "extra_login";
     final String TAG = "RoomsActivity";
-    RoomsActivityBackend backend;
+    RoomsActivityViewModel backend;
     KanbanDao kanbanDao;
     TextView loginLabel;
     EditText nameOfNewRoom;
@@ -51,7 +49,7 @@ public class RoomsActivity extends AppCompatActivity {
 
     private void initElements() {
         kanbanDao = DatabaseManager.getInstance(this).getKanbanDao();
-        backend = new RoomsActivityBackend(this, kanbanDao, getLogin());
+        backend = new RoomsActivityViewModel(this, kanbanDao, getLogin());
 
         loginLabel = findViewById(R.id.label_login);
         loginLabel.setText(backend.getLogin());

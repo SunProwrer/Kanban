@@ -1,4 +1,4 @@
-package database.dataclass;
+package model.entity;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;

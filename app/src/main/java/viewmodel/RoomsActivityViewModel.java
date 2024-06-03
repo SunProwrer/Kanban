@@ -1,24 +1,22 @@
-package backend;
+package viewmodel;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.Adapter;
-import android.widget.ArrayAdapter;
 
 import org.hse.kanban.RoomActivity;
 
 import java.util.List;
 
 import adapters.RoomAdapter;
-import database.checkers.Checker;
-import database.dao.KanbanDao;
-import database.dataclass.AccessEntity;
-import database.dataclass.RoomEntity;
-import database.dataclass.UserEntity;
+import model.database.checkers.Checker;
+import model.database.dao.KanbanDao;
+import model.entity.AccessEntity;
+import model.entity.RoomEntity;
+import model.entity.UserEntity;
 
-public class RoomsActivityBackend {
+public class RoomsActivityViewModel {
     private final String TAG = "RoomsActivityBackend";
     private Activity activity;
     private final Context context;
@@ -28,7 +26,7 @@ public class RoomsActivityBackend {
     private RoomAdapter adapter;
     private String nameOfNewRoom = "";
 
-    public RoomsActivityBackend(Context _context, KanbanDao _kanbanDao, String _login) {
+    public RoomsActivityViewModel(Context _context, KanbanDao _kanbanDao, String _login) {
         context = _context;
         kanbanDao = _kanbanDao;
         user = kanbanDao.getUserByLogin(_login).get(0);

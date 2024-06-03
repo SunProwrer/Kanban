@@ -1,4 +1,4 @@
-package backend;
+package viewmodel;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,18 +6,18 @@ import android.content.Intent;
 
 import org.hse.kanban.RoomsActivity;
 
-import database.checkers.Checker;
-import database.dao.KanbanDao;
-import database.dataclass.UserEntity;
+import model.database.checkers.Checker;
+import model.database.dao.KanbanDao;
+import model.entity.UserEntity;
 
-public class AuthActivityBackend {
+public class AuthActivityViewModel {
     private Activity activity;
     private final Context context;
     private final KanbanDao kanbanDao;
     private String login;
     private String password;
 
-    public AuthActivityBackend(Context _context, KanbanDao _kanbanDao){
+    public AuthActivityViewModel(Context _context, KanbanDao _kanbanDao){
         context = _context;
         kanbanDao = _kanbanDao;
 

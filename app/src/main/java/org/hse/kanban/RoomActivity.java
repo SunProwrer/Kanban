@@ -18,15 +18,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import adapters.RecyclerItemClickListener;
-import backend.RoomActivityBackend;
-import database.DatabaseManager;
-import database.dao.KanbanDao;
+import viewmodel.RoomActivityViewModel;
+import model.database.DatabaseManager;
+import model.database.dao.KanbanDao;
 
 public class RoomActivity extends AppCompatActivity {
     public static final String USER = "extra_user_id";
     public static final String ROOM = "extra_room_id";
     private static final String TAG = "RoomActivity";
-    RoomActivityBackend backend;
+    RoomActivityViewModel backend;
     KanbanDao kanbanDao;
     TextView nameOfRoomLabel;
     EditText headerOfNewTask;
@@ -54,7 +54,7 @@ public class RoomActivity extends AppCompatActivity {
 
     private void initElements() {
         kanbanDao = DatabaseManager.getInstance(this).getKanbanDao();
-        backend = new RoomActivityBackend(this, kanbanDao, getIdUser(), getIdRoom());
+        backend = new RoomActivityViewModel(this, kanbanDao, getIdUser(), getIdRoom());
 
         nameOfRoomLabel = findViewById(R.id.label_name);
         headerOfNewTask = findViewById(R.id.input_newTask);

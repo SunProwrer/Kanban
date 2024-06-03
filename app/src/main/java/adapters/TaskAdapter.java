@@ -13,7 +13,7 @@ import org.hse.kanban.R;
 
 import java.util.List;
 
-import database.dataclass.TaskEntity;
+import model.entity.TaskEntity;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     private final LayoutInflater inflater;

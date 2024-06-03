@@ -1,4 +1,4 @@
-package backend;
+package viewmodel;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,13 +9,13 @@ import org.hse.kanban.TaskActivity;
 import java.util.List;
 
 import adapters.TaskAdapter;
-import database.checkers.Checker;
-import database.dao.KanbanDao;
-import database.dataclass.RoomEntity;
-import database.dataclass.TaskEntity;
-import database.dataclass.UserEntity;
+import model.database.checkers.Checker;
+import model.database.dao.KanbanDao;
+import model.entity.RoomEntity;
+import model.entity.TaskEntity;
+import model.entity.UserEntity;
 
-public class RoomActivityBackend {
+public class RoomActivityViewModel {
     private Activity activity;
     private Context context;
     private KanbanDao kanbanDao;
@@ -25,7 +25,7 @@ public class RoomActivityBackend {
     private TaskAdapter adapter;
     private String headerOfNewTask = "";
     private int status = TaskEntity.TODO;
-    public RoomActivityBackend(Context _context, KanbanDao _kanbanDao, String login, String name){
+    public RoomActivityViewModel(Context _context, KanbanDao _kanbanDao, String login, String name){
         context = _context;
         kanbanDao = _kanbanDao;
         user = kanbanDao.getUserByLogin(login).get(0);

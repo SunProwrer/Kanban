@@ -1,16 +1,16 @@
-package backend;
+package viewmodel;
 
 import android.app.Activity;
 import android.content.Context;
 
-import database.dao.KanbanDao;
+import model.database.dao.KanbanDao;
 
-public class TaskActivityBackend {
+public class TaskActivityViewModel {
     private Activity activity;
     private Context context;
     private KanbanDao kanbanDao;
 
-    public TaskActivityBackend(Context _context, KanbanDao _kanbanDao) {
+    public TaskActivityViewModel(Context _context, KanbanDao _kanbanDao) {
         context = _context;
         kanbanDao = _kanbanDao;
     }

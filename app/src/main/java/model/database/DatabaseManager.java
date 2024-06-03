@@ -1,18 +1,15 @@
-package database;
+package model.database;
 
 import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.concurrent.Executors;
 
-import database.dao.KanbanDao;
-import database.dataclass.AccessEntity;
-import database.dataclass.UserEntity;
+import model.database.dao.KanbanDao;
 
 public class DatabaseManager {
     private final DatabaseHelper db;

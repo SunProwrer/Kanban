@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -14,19 +13,15 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-import backend.AuthActivityBackend;
-import database.DatabaseHelper;
-import database.DatabaseManager;
-import database.dao.KanbanDao;
-import database.dataclass.AccessEntity;
-import database.dataclass.UserEntity;
+import viewmodel.AuthActivityViewModel;
+import model.database.DatabaseManager;
+import model.database.dao.KanbanDao;
+import model.entity.UserEntity;
 
 public class AuthActivity extends AppCompatActivity {
-    private AuthActivityBackend backend;
+    private AuthActivityViewModel backend;
     private KanbanDao kanbanDao;
     private EditText loginLabel;
     private EditText passwordLabel;
@@ -67,7 +62,7 @@ public class AuthActivity extends AppCompatActivity {
 
     private void initElements(){
         kanbanDao = DatabaseManager.getInstance(this).getKanbanDao();
-        backend = new AuthActivityBackend(this, kanbanDao);
+        backend = new AuthActivityViewModel(this, kanbanDao);
 
         loginLabel = findViewById(R.id.input_login);
         passwordLabel = findViewById(R.id.input_password);

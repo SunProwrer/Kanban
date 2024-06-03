@@ -1,4 +1,4 @@
-package database.dao;
+package model.database.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -10,10 +10,10 @@ import androidx.room.Update;
 
 import java.util.List;
 
-import database.dataclass.AccessEntity;
-import database.dataclass.RoomEntity;
-import database.dataclass.TaskEntity;
-import database.dataclass.UserEntity;
+import model.entity.AccessEntity;
+import model.entity.RoomEntity;
+import model.entity.TaskEntity;
+import model.entity.UserEntity;
 
 @Dao
 public interface KanbanDao {

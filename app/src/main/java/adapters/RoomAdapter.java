@@ -1,12 +1,10 @@
 package adapters;
 
 import android.content.Context;
-import android.hardware.Sensor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,7 +13,7 @@ import org.hse.kanban.R;
 
 import java.util.List;
 
-import database.dataclass.RoomEntity;
+import model.entity.RoomEntity;
 
 public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.ViewHolder> {
     private final LayoutInflater inflater;

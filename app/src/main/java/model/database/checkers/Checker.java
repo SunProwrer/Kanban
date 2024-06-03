@@ -1,11 +1,11 @@
-package database.checkers;
+package model.database.checkers;
 
 import java.util.List;
 
-import database.dao.KanbanDao;
-import database.dataclass.RoomEntity;
-import database.dataclass.TaskEntity;
-import database.dataclass.UserEntity;
+import model.database.dao.KanbanDao;
+import model.entity.RoomEntity;
+import model.entity.TaskEntity;
+import model.entity.UserEntity;
 
 public class Checker {
     public static boolean checkLoginAndPassword(KanbanDao kanbanDao, String login, String password) {

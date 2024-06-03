@@ -10,15 +10,15 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import backend.TaskActivityBackend;
-import database.DatabaseManager;
-import database.dao.KanbanDao;
+import viewmodel.TaskActivityViewModel;
+import model.database.DatabaseManager;
+import model.database.dao.KanbanDao;
 
 public class TaskActivity extends AppCompatActivity {
     public static final String ROOM = "extra_room_id";
     public static final String TASK = "extra_task_id";
     private KanbanDao kanbanDao;
-    private TaskActivityBackend backend;
+    private TaskActivityViewModel backend;
     private TextView headerLabel;
     private TextView statusLabel;
     private TextView deadlineLabel;
@@ -43,7 +43,7 @@ public class TaskActivity extends AppCompatActivity {
     
     private void initElements() {
         kanbanDao = DatabaseManager.getInstance(this).getKanbanDao();
-        backend = new TaskActivityBackend(this, kanbanDao);
+        backend = new TaskActivityViewModel(this, kanbanDao);
         headerLabel = findViewById(R.id.label_taskHead);
         statusLabel = findViewById(R.id.label_status);
         deadlineLabel = findViewById(R.id.label_deadline);
