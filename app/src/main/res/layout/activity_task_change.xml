@@ -51,7 +51,7 @@
         </RelativeLayout>
         <LinearLayout
             android:id="@+id/layout_deadline"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/layout_status"
             android:orientation="horizontal">
@@ -60,13 +60,16 @@
                 android:layout_height="wrap_content"
                 android:textSize="28sp"
                 tools:text="Дедлайн:"/>
-            <EditText
+
+            <DatePicker
                 android:id="@+id/input_deadline"
-                android:layout_width="160dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:calendarViewShown="false"
+                android:datePickerMode="spinner"
                 android:inputType="date"
                 android:textSize="24sp"
-                tools:text="12.04.2024"/>
+                tools:text="12.04.2024" />
         </LinearLayout>
         <LinearLayout
             android:id="@+id/layout_taskBody"
@@ -78,8 +81,8 @@
             android:orientation="vertical">
             <EditText
                 android:id="@+id/input_taskBody"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:textSize="28sp"
                 android:inputType="textMultiLine"
                 android:hint="@string/task_change_input_task_body"/>

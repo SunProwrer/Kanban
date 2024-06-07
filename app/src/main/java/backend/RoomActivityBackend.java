@@ -64,9 +64,10 @@ public class RoomActivityBackend {
 
     public void goToTask(int index) {
         Intent intent = new Intent(context, TaskActivity.class);
-        intent.putExtra(TaskActivity.ROOM, room.idRoom);
+//        intent.putExtra(TaskActivity.ROOM, room.idRoom);
         intent.putExtra(TaskActivity.TASK, tasks.get(index).idTask);
         context.startActivity(intent);
+        adapter.notifyDataSetChanged();
     }
 
     public void changeStatusToTODO() {

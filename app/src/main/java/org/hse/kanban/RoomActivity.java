@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -16,6 +17,8 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.RoomOpenHelper;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import adapters.RecyclerItemClickListener;
 import backend.RoomActivityBackend;
@@ -116,6 +119,7 @@ public class RoomActivity extends AppCompatActivity {
                 new RecyclerItemClickListener(this, recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
                         backend.goToTask(position);
+//                        updateTextOnButtons();
                     }
                     @Override public void onLongItemClick(View view, int position) {
                         // do whatever

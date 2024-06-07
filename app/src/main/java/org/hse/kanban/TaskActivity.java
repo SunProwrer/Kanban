@@ -1,6 +1,7 @@
 package org.hse.kanban;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -25,6 +26,8 @@ public class TaskActivity extends AppCompatActivity {
     private TextView bodyLabel;
     private Button prevStatus;
     private Button nextStatus;
+    private Button deleteTask;
+    private Button updateTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,27 +43,47 @@ public class TaskActivity extends AppCompatActivity {
         setDataToViews();
         setHandlers();
     }
-    
+
     private void initElements() {
         kanbanDao = DatabaseManager.getInstance(this).getKanbanDao();
-        backend = new TaskActivityBackend(this, kanbanDao);
+        int idTask = getIntent().getExtras().getInt(TASK);
+        backend = new TaskActivityBackend(this, kanbanDao, idTask);
         headerLabel = findViewById(R.id.label_taskHead);
         statusLabel = findViewById(R.id.label_status);
         deadlineLabel = findViewById(R.id.label_deadline);
         bodyLabel = findViewById(R.id.label_taskBody);
         prevStatus = findViewById(R.id.button_prev_status);
         nextStatus = findViewById(R.id.button_next_status);
+        deleteTask = findViewById(R.id.button_deleteTask);
+        updateTask = findViewById(R.id.button_changeTask);
     }
 
     private void setDataToViews() {
-
+        headerLabel.setText(backend.getTaskHeader());
+        statusLabel.setText(backend.getTaskStatus());
+        deadlineLabel.setText(backend.getDeadline());
+        bodyLabel.setText(backend.getTaskBody());
     }
 
     private void setHandlers() {
+        prevStatus.setOnClickListener(v -> {
+            backend.decreaseTaskStatus();
+            setDataToViews();
+        });
 
-    }
+        nextStatus.setOnClickListener(v -> {
+            backend.increaseTaskStatus();
+            setDataToViews();
+        });
 
-    private void getData() {
+        deleteTask.setOnClickListener(v -> {
+            backend.deleteTask();
+            finish();
+        });
 
+        updateTask.setOnClickListener(v -> {
+            backend.goUpdateTask();
+            setDataToViews();
+        });
     }
 }

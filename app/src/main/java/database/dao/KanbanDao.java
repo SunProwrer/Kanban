@@ -29,6 +29,9 @@ public interface KanbanDao {
     @Query("SELECT * FROM users WHERE login = :login")
     List<UserEntity> getUserByLogin(String login);
 
+    @Query("SELECT * FROM users WHERE idUser IN (SELECT idUser FROM access WHERE idRoom = :idRoom)")
+    List<UserEntity> getUsersByRoom(long idRoom);
+
     @Update
     void updateUser(UserEntity user);
 
@@ -65,11 +68,20 @@ public interface KanbanDao {
     @Query("SELECT * FROM access")
     LiveData<List<AccessEntity>> getAccess();
 
+    @Query("SELECT * FROM access WHERE idAccess = :idAccess")
+    List<AccessEntity> getAccessById(int idAccess);
+
+    @Query("SELECT * FROM access WHERE idRoom = :idRoom AND idUser = :idUser")
+    List<AccessEntity> getAccessByIdRoomAndUser(int idRoom, int idUser);
+
     @Insert
     void insertAccess(AccessEntity access);
 
     @Delete
     void deleteAccess(AccessEntity access);
+
+    @Query("DELETE FROM access WHERE idRoom = :idRoom")
+    void eraseAccessesInRoom(long idRoom);
 
     @Query("SELECT * FROM tasks")
     LiveData<List<TaskEntity>> getTask();
