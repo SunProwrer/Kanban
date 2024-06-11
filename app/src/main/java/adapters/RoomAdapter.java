@@ -17,10 +17,10 @@ import model.entity.RoomEntity;
 
 public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.ViewHolder> {
     private final LayoutInflater inflater;
-    private final List<RoomEntity> rooms;
+    private List<RoomEntity> rooms;
 
-    public RoomAdapter(Context context, List<RoomEntity> sensors) {
-        this.rooms = sensors;
+    public RoomAdapter(Context context, List<RoomEntity> rooms) {
+        this.rooms = rooms;
         this.inflater = LayoutInflater.from(context);
     }
 
@@ -42,11 +42,18 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.ViewHolder> {
         return rooms.size();
     }
 
+    public void updateRooms(List<RoomEntity> newRooms) {
+        this.rooms = newRooms;
+        notifyDataSetChanged();
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         final Button nameRoom;
-        ViewHolder(View view){
+
+        ViewHolder(View view) {
             super(view);
             nameRoom = view.findViewById(R.id.widget_button_name_of_task_or_room);
         }
     }
 }
+

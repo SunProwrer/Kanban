@@ -1,58 +1,69 @@
 package viewmodel;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import org.hse.kanban.RoomActivity;
 
 import java.util.List;
 
 import adapters.RoomAdapter;
+import model.database.DatabaseManager;
 import model.database.checkers.Checker;
 import model.database.dao.KanbanDao;
 import model.entity.AccessEntity;
 import model.entity.RoomEntity;
 import model.entity.UserEntity;
 
-public class RoomsActivityViewModel {
-    private final String TAG = "RoomsActivityBackend";
-    private Activity activity;
-    private final Context context;
+public class RoomsActivityViewModel extends AndroidViewModel {
+    private static final String TAG = "RoomsActivityViewModel";
     private final KanbanDao kanbanDao;
+    private final MutableLiveData<List<RoomEntity>> roomsLiveData = new MutableLiveData<>();
+    private final MutableLiveData<String> nameOfNewRoomLiveData = new MutableLiveData<>();
     private UserEntity user;
-    private List<RoomEntity> rooms;
-    private RoomAdapter adapter;
-    private String nameOfNewRoom = "";
 
-    public RoomsActivityViewModel(Context _context, KanbanDao _kanbanDao, String _login) {
-        context = _context;
-        kanbanDao = _kanbanDao;
-        user = kanbanDao.getUserByLogin(_login).get(0);
+    public RoomsActivityViewModel(@NonNull Application application) {
+        super(application);
+        kanbanDao = DatabaseManager.getInstance(application).getKanbanDao();
+    }
+
+    public void init(String login) {
+        user = kanbanDao.getUserByLogin(login).get(0);
         initRoomsList();
-        createAdapter();
+    }
+
+    public LiveData<List<RoomEntity>> getRoomsLiveData() {
+        return roomsLiveData;
+    }
+
+    public LiveData<String> getNameOfNewRoomLiveData() {
+        return nameOfNewRoomLiveData;
+    }
+
+    public void setNameOfNewRoom(String name) {
+        nameOfNewRoomLiveData.setValue(name);
     }
 
     public String getLogin() {
         return user.login;
     }
 
-    public void setNameOfNewRoom(String name) {
-        nameOfNewRoom = name;
-    }
-
-    public RoomAdapter getAdapter() {
-        return adapter;
-    }
-
     public void createNewRoom() {
-        if (nameOfNewRoom.isEmpty()) {
-            //TODO toast
+        String nameOfNewRoom = nameOfNewRoomLiveData.getValue();
+        if (nameOfNewRoom == null || nameOfNewRoom.isEmpty()) {
+            // TODO: Show a toast or handle the error appropriately
             return;
         }
-        if (Checker.checkAvailableNameOfRoom(kanbanDao, nameOfNewRoom)) {
-            //TODO toast
+        if (!Checker.checkAvailableNameOfRoom(kanbanDao, nameOfNewRoom)) {
+            // TODO: Show a toast or handle the error appropriately
             return;
         }
         RoomEntity newRoom = new RoomEntity();
@@ -66,30 +77,26 @@ public class RoomsActivityViewModel {
         access.idUser = user.idUser;
         access.role = AccessEntity.OWNER;
         kanbanDao.insertAccess(access);
-        addRoomToList(nameOfNewRoom);
-        updateAdapter();
+        addRoomToList(newRoom);
     }
 
-    public void goToRoom(int index) {
+    public void goToRoom(Context context, int index) {
         Intent intent = new Intent(context, RoomActivity.class);
         intent.putExtra(RoomActivity.USER, user.login);
-        intent.putExtra(RoomActivity.ROOM, rooms.get(index).name);
+        intent.putExtra(RoomActivity.ROOM, roomsLiveData.getValue().get(index).name);
         context.startActivity(intent);
     }
 
     private void initRoomsList() {
-        rooms = kanbanDao.getRoomsByUserId(user.idUser);
+        List<RoomEntity> rooms = kanbanDao.getRoomsByUserId(user.idUser);
+        roomsLiveData.setValue(rooms);
     }
 
-    private void addRoomToList(String name) {
-        rooms.add(kanbanDao.getRoomByName(name).get(0));
-    }
-
-    private void createAdapter() {
-        adapter = new RoomAdapter(context, rooms);
-    }
-
-    private void updateAdapter() {
-        adapter.notifyItemInserted(rooms.size() - 1);
+    private void addRoomToList(RoomEntity newRoom) {
+        List<RoomEntity> currentRooms = roomsLiveData.getValue();
+        currentRooms.add(newRoom);
+        roomsLiveData.setValue(currentRooms);
     }
 }
+
+

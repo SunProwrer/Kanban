@@ -6,11 +6,15 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 
 import java.util.Date;
 
-@Entity(tableName = "tasks", indices = {@Index(value = {"header"}, unique = true)}
-        , foreignKeys = {@ForeignKey(entity = RoomEntity.class, parentColumns = "idRoom", childColumns = "idRoom", onDelete = ForeignKey.CASCADE)})
+import model.database.converters.Converters;
+
+@Entity(tableName = "tasks", indices = {@Index(value = {"header"}, unique = true)},
+        foreignKeys = {@ForeignKey(entity = RoomEntity.class, parentColumns = "idRoom", childColumns = "idRoom", onDelete = ForeignKey.CASCADE)})
+@TypeConverters(Converters.class)
 public class TaskEntity {
     @PrimaryKey(autoGenerate = true)
     public int idTask;
