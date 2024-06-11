@@ -1,8 +1,15 @@
 package viewmodel;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import org.hse.kanban.TaskActivity;
 
@@ -15,42 +22,42 @@ import model.entity.RoomEntity;
 import model.entity.TaskEntity;
 import model.entity.UserEntity;
 
-public class RoomActivityViewModel {
-    private Activity activity;
-    private Context context;
+public class RoomActivityViewModel extends AndroidViewModel {
+    private MutableLiveData<List<TaskEntity>> tasksLiveData;
     private KanbanDao kanbanDao;
-    private UserEntity user;
     private RoomEntity room;
-    private List<TaskEntity> tasks;
-    private TaskAdapter adapter;
+    private UserEntity user;
     private String headerOfNewTask = "";
     private int status = TaskEntity.TODO;
-    public RoomActivityViewModel(Context _context, KanbanDao _kanbanDao, String login, String name){
-        context = _context;
+
+    public RoomActivityViewModel(@NonNull Application application, KanbanDao _kanbanDao, String login, String name) {
+        super(application);
         kanbanDao = _kanbanDao;
         user = kanbanDao.getUserByLogin(login).get(0);
         room = kanbanDao.getRoomByName(name).get(0);
+        tasksLiveData = new MutableLiveData<>();
         initTasksList();
-        createAdapter();
     }
 
-    public String getNameOfRoom() { return room.name; }
+    public String getNameOfRoom() {
+        return room.name;
+    }
 
     public void setHeaderOfNewTask(String header) {
         headerOfNewTask = header;
     }
 
-    public TaskAdapter getAdapter() {
-        return adapter;
+    public LiveData<List<TaskEntity>> getTasksLiveData() {
+        return tasksLiveData;
     }
 
     public void createNewTask() {
         if (headerOfNewTask.isEmpty()) {
-            //TODO toast
+            // TODO: Show a toast or handle the error appropriately
             return;
         }
-        if (Checker.checkAvailableNameOfTaskForRoom(kanbanDao, headerOfNewTask, room.idRoom)) {
-            //TODO toast
+        if (!Checker.checkAvailableNameOfTaskForRoom(kanbanDao, headerOfNewTask, room.idRoom)) {
+            // TODO: Show a toast or handle the error appropriately
             return;
         }
         TaskEntity newTask = new TaskEntity();
@@ -63,10 +70,10 @@ public class RoomActivityViewModel {
     }
 
     public void goToTask(int index) {
-        Intent intent = new Intent(context, TaskActivity.class);
+        Intent intent = new Intent(getApplication(), TaskActivity.class);
         intent.putExtra(TaskActivity.ROOM, room.idRoom);
-        intent.putExtra(TaskActivity.TASK, tasks.get(index).idTask);
-        context.startActivity(intent);
+        intent.putExtra(TaskActivity.TASK, tasksLiveData.getValue().get(index).idTask);
+        getApplication().startActivity(intent);
     }
 
     public void changeStatusToTODO() {
@@ -97,29 +104,20 @@ public class RoomActivityViewModel {
     }
 
     private void initTasksList() {
-        tasks = kanbanDao.getTasksByIdRoomAndStatus(room.idRoom, status);
+        List<TaskEntity> tasks = kanbanDao.getTasksByIdRoomAndStatus(room.idRoom, status);
+        tasksLiveData.setValue(tasks);
     }
 
     private void addNewTaskToList(String header) {
-        tasks.add(kanbanDao.getTaskByHeader(header).get(0));
-        updateAdapter();
+        List<TaskEntity> currentTasks = tasksLiveData.getValue();
+        currentTasks.add(kanbanDao.getTaskByHeader(header).get(0));
+        tasksLiveData.setValue(currentTasks);
     }
 
     private void refreshTaskList() {
-        tasks.clear();
-        tasks.addAll(kanbanDao.getTasksByIdRoomAndStatus(room.idRoom, status));
-        hardUpdateAdapter();
-    }
-
-    private void createAdapter() {
-        adapter = new TaskAdapter(context, tasks);
-    }
-
-    private void updateAdapter() {
-        adapter.notifyItemInserted(tasks.size() - 1);
-    }
-
-    private void hardUpdateAdapter() {
-        adapter.notifyDataSetChanged();
+        List<TaskEntity> updatedTasks = kanbanDao.getTasksByIdRoomAndStatus(room.idRoom, status);
+        tasksLiveData.setValue(updatedTasks);
     }
 }
+
+

@@ -9,15 +9,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import adapters.RecyclerItemClickListener;
+import adapters.TaskAdapter;
 import viewmodel.RoomActivityViewModel;
 import model.database.DatabaseManager;
 import model.database.dao.KanbanDao;
@@ -26,7 +30,7 @@ public class RoomActivity extends AppCompatActivity {
     public static final String USER = "extra_user_id";
     public static final String ROOM = "extra_room_id";
     private static final String TAG = "RoomActivity";
-    RoomActivityViewModel backend;
+    RoomActivityViewModel viewModel;
     KanbanDao kanbanDao;
     TextView nameOfRoomLabel;
     EditText headerOfNewTask;
@@ -54,14 +58,28 @@ public class RoomActivity extends AppCompatActivity {
 
     private void initElements() {
         kanbanDao = DatabaseManager.getInstance(this).getKanbanDao();
-        backend = new RoomActivityViewModel(this, kanbanDao, getIdUser(), getIdRoom());
+
+        // Использование ViewModelProvider для получения экземпляра ViewModel
+        viewModel = new ViewModelProvider(this, new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                return (T) new RoomActivityViewModel(getApplication(), kanbanDao, getIdUser(), getIdRoom());
+            }
+        }).get(RoomActivityViewModel.class);
 
         nameOfRoomLabel = findViewById(R.id.label_name);
         headerOfNewTask = findViewById(R.id.input_newTask);
         recyclerView = findViewById(R.id.layout_tasks);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-        recyclerView.setAdapter(backend.getAdapter());
+
+        // Инициализация адаптера
+        viewModel.getTasksLiveData().observe(this, tasks -> {
+            TaskAdapter adapter = new TaskAdapter(this, tasks);
+            recyclerView.setAdapter(adapter);
+        });
+
         addTaskButton = findViewById(R.id.button_addTask);
         switchToTODO = findViewById(R.id.button_todo);
         switchToDOING = findViewById(R.id.button_doing);
@@ -69,14 +87,14 @@ public class RoomActivity extends AppCompatActivity {
     }
 
     private void setDataToViews() {
-        nameOfRoomLabel.setText(backend.getNameOfRoom());
+        nameOfRoomLabel.setText(viewModel.getNameOfRoom());
         updateTextOnButtons();
     }
 
     private void updateTextOnButtons() {
-        switchToTODO.setText(getNameOfButton(R.string.room_button_todo, backend.getCountOfTODOTasks()));
-        switchToDOING.setText(getNameOfButton(R.string.room_button_doing, backend.getCountOfDOINGTasks()));
-        switchToDONE.setText(getNameOfButton(R.string.room_button_done, backend.getCountOfDONETasks()));
+        switchToTODO.setText(getNameOfButton(R.string.room_button_todo, viewModel.getCountOfTODOTasks()));
+        switchToDOING.setText(getNameOfButton(R.string.room_button_doing, viewModel.getCountOfDOINGTasks()));
+        switchToDONE.setText(getNameOfButton(R.string.room_button_done, viewModel.getCountOfDONETasks()));
     }
 
     private String getNameOfButton(int msg, int count) {
@@ -96,35 +114,38 @@ public class RoomActivity extends AppCompatActivity {
     private void setHandlers() {
         headerOfNewTask.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
             @Override
             public void afterTextChanged(Editable s) {
-                backend.setHeaderOfNewTask(s.toString());
+                viewModel.setHeaderOfNewTask(s.toString());
             }
         });
 
         addTaskButton.setOnClickListener(v -> {
-            backend.createNewTask();
+            viewModel.createNewTask();
             updateTextOnButtons();
         });
 
         recyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(this, recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override public void onItemClick(View view, int position) {
-                        backend.goToTask(position);
+                new RecyclerItemClickListener(this, recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        viewModel.goToTask(position);
                     }
-                    @Override public void onLongItemClick(View view, int position) {
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
                         // do whatever
                     }
                 })
         );
 
-        switchToTODO.setOnClickListener(v -> backend.changeStatusToTODO());
-        switchToDOING.setOnClickListener(v -> backend.changeStatusToDOING());
-        switchToDONE.setOnClickListener(v -> backend.changeStatusToDONE());
+        switchToTODO.setOnClickListener(v -> viewModel.changeStatusToTODO());
+        switchToDOING.setOnClickListener(v -> viewModel.changeStatusToDOING());
+        switchToDONE.setOnClickListener(v -> viewModel.changeStatusToDONE());
     }
 }
