@@ -1,8 +1,15 @@
 package viewmodel;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import org.hse.kanban.RoomsActivity;
 
@@ -10,57 +17,70 @@ import model.database.checkers.Checker;
 import model.database.dao.KanbanDao;
 import model.entity.UserEntity;
 
-public class AuthActivityViewModel {
-    private Activity activity;
-    private final Context context;
+// AuthActivityViewModel.java
+public class AuthActivityViewModel extends AndroidViewModel {
     private final KanbanDao kanbanDao;
+    private MutableLiveData<AuthState> authState;
+    private MutableLiveData<String> authMessage;
     private String login;
     private String password;
 
-    public AuthActivityViewModel(Context _context, KanbanDao _kanbanDao){
-        context = _context;
-        kanbanDao = _kanbanDao;
+    public AuthActivityViewModel(@NonNull Application application, KanbanDao kanbanDao) {
+        super(application);
+        this.kanbanDao = kanbanDao;
+        authState = new MutableLiveData<>();
+        authMessage = new MutableLiveData<>();
+    }
 
-        login = "";
-        password = "";
+    public void setLogin(String login) {
+        this.login = login;
     }
-    public void setLogin(String _login){
-        login = _login;
-    }
-    public void setPassword(String _password){
+
+    public void setPassword(String password) {
         // TODO hash password
-        password = _password;
+        this.password = password;
     }
 
-    private String getLogin(){
+    public String getLogin() {
         return login;
     }
-    private String getPassword(){
-        return password;
+
+    public LiveData<AuthState> getAuthState() {
+        return authState;
     }
 
-    public void logIn(){
-        if (loginOrPasswordIsEmpty())
-            return;
+    public LiveData<String> getAuthMessage() {
+        return authMessage;
+    }
 
-        if (Checker.checkLoginAndPassword(kanbanDao, login, password)){
-            goToRooms();
+    public void logIn() {
+        if (loginOrPasswordIsEmpty()) {
+            authState.setValue(AuthState.FAILURE);
+            authMessage.setValue("Login or password cannot be empty");
+            return;
         }
-        else{
-            // TODO message
+
+        if (Checker.checkLoginAndPassword(kanbanDao, login, password)) {
+            authState.setValue(AuthState.SUCCESS);
+        } else {
+            authState.setValue(AuthState.FAILURE);
+            authMessage.setValue("Invalid login or password");
         }
     }
 
-    public void register(){
-        if (loginOrPasswordIsEmpty())
+    public void register() {
+        if (loginOrPasswordIsEmpty()) {
+            authState.setValue(AuthState.FAILURE);
+            authMessage.setValue("Login or password cannot be empty");
             return;
+        }
 
-        if (!Checker.checkLogin(kanbanDao, login)){
+        if (!Checker.checkLogin(kanbanDao, login)) {
             createUser();
-            goToRooms();
-        }
-        else{
-            // TODO message
+            authState.setValue(AuthState.SUCCESS);
+        } else {
+            authState.setValue(AuthState.FAILURE);
+            authMessage.setValue("Login already exists");
         }
     }
 
@@ -68,16 +88,11 @@ public class AuthActivityViewModel {
         return login.isEmpty() || password.isEmpty();
     }
 
-    private void goToRooms(){
-        Intent intent = new Intent(context, RoomsActivity.class);
-        intent.putExtra(RoomsActivity.LOGIN, login);
-        context.startActivity(intent);
-    }
-
-    private void createUser(){
+    private void createUser() {
         UserEntity user = new UserEntity();
         user.login = login;
         user.password = password;
         kanbanDao.insertUser(user);
     }
 }
+

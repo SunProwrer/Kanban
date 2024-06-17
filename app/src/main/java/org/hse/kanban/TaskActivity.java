@@ -43,7 +43,7 @@ public class TaskActivity extends AppCompatActivity {
     
     private void initElements() {
         kanbanDao = DatabaseManager.getInstance(this).getKanbanDao();
-        backend = new TaskActivityViewModel(this, kanbanDao);
+        backend = new TaskActivityViewModel(this.getApplication(), kanbanDao);
         headerLabel = findViewById(R.id.label_taskHead);
         statusLabel = findViewById(R.id.label_status);
         deadlineLabel = findViewById(R.id.label_deadline);

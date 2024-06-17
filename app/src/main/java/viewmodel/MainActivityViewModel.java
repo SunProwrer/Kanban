@@ -1,14 +1,21 @@
 package viewmodel;
 
-public class MainActivityViewModel {
-    //Room room;
-    //List<AbstractTask> tasks;
+import android.app.Application;
 
-    public void onCreate() {
-        loadTasks();
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.MutableLiveData;
+
+import java.util.ArrayList;
+
+public class MainActivityViewModel extends AndroidViewModel {
+    //private MutableLiveData<List<AbstractTask>> tasksLiveData;
+
+    public MainActivityViewModel(@NonNull Application application) {
+        super(application);
+        //tasksLiveData = new MutableLiveData<>();
     }
 
-    public void loadTasks() {
 
-    }
 }
+

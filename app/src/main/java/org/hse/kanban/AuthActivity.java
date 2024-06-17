@@ -1,17 +1,22 @@
 package org.hse.kanban;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 import java.util.List;
 
@@ -19,10 +24,11 @@ import viewmodel.AuthActivityViewModel;
 import model.database.DatabaseManager;
 import model.database.dao.KanbanDao;
 import model.entity.UserEntity;
+import viewmodel.AuthState;
 
+// AuthActivity.java
 public class AuthActivity extends AppCompatActivity {
-    private AuthActivityViewModel backend;
-    private KanbanDao kanbanDao;
+    private AuthActivityViewModel viewModel;
     private EditText loginLabel;
     private EditText passwordLabel;
     private Button logInButton;
@@ -41,28 +47,19 @@ public class AuthActivity extends AppCompatActivity {
 
         initElements();
         setHandlers();
-
-//        UserEntity user = new UserEntity();
-//        user.login = "l";
-//        user.password = "p";
-//        List<UserEntity> users = new ArrayList<>();
-//        users.add(user);
-//        kanbanDao.insertUsers(users);
-
-//        AccessEntity access = new AccessEntity();
-//        access.role = AccessEntity.OWNER;
-//        access.idRoom = 1;
-//        access.idUser = 4;
-//        kanbanDao.insertAccess(access);
-
-//        seeDatabase();
-//        insertAnExample();
-//        seeDatabase();
+        observeViewModel();
     }
 
-    private void initElements(){
-        kanbanDao = DatabaseManager.getInstance(this).getKanbanDao();
-        backend = new AuthActivityViewModel(this, kanbanDao);
+    private void initElements() {
+        KanbanDao kanbanDao = DatabaseManager.getInstance(this).getKanbanDao();
+
+        viewModel = new ViewModelProvider(this, new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                return (T) new AuthActivityViewModel(getApplication(), kanbanDao);
+            }
+        }).get(AuthActivityViewModel.class);
 
         loginLabel = findViewById(R.id.input_login);
         passwordLabel = findViewById(R.id.input_password);
@@ -80,7 +77,7 @@ public class AuthActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                backend.setLogin(s.toString());
+                viewModel.setLogin(s.toString());
             }
         });
 
@@ -93,35 +90,35 @@ public class AuthActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                backend.setPassword(s.toString());
+                viewModel.setPassword(s.toString());
             }
         });
 
-        logInButton.setOnClickListener(v -> backend.logIn());
+        logInButton.setOnClickListener(v -> viewModel.logIn());
 
-        registerButton.setOnClickListener(v -> backend.register());
+        registerButton.setOnClickListener(v -> viewModel.register());
     }
 
-    private void seeDatabase() {
-        List<UserEntity> users = kanbanDao.getUsers();
+    private void observeViewModel() {
+        viewModel.getAuthState().observe(this, authState -> {
+            if (authState == AuthState.SUCCESS) {
+                goToRooms();
+            } else if (authState == AuthState.FAILURE) {
+                Toast.makeText(this, viewModel.getAuthMessage().getValue(), Toast.LENGTH_SHORT).show();
+            }
+        });
 
-        if (users == null) {
-            Log.i(TAG, "null result");
-        } else {
-            Log.i(TAG, String.valueOf(users.size()));
-        }
+        viewModel.getAuthMessage().observe(this, message -> {
+            if (message != null && !message.isEmpty()) {
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    private void insertAnExample() {
-        try {
-            UserEntity user = new UserEntity();
-            user.password = "password";
-            user.login = "login";
-            kanbanDao.insertUser(user);
-        } catch (Exception ex) {
-            Log.i(TAG, "This user was already added");
-        }
+    private void goToRooms() {
+        Intent intent = new Intent(this, RoomsActivity.class);
+        intent.putExtra(RoomsActivity.LOGIN, viewModel.getLogin());
+        startActivity(intent);
     }
-
-    private final String TAG = "AuthActivity";
 }
+
