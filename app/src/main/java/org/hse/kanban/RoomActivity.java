@@ -31,13 +31,18 @@ public class RoomActivity extends AppCompatActivity {
     private static final String TAG = "RoomActivity";
     RoomActivityBackend backend;
     KanbanDao kanbanDao;
-    TextView nameOfRoomLabel;
+    EditText nameOfRoomLabel;
     EditText headerOfNewTask;
     RecyclerView recyclerView;
     Button addTaskButton;
     Button switchToTODO;
     Button switchToDOING;
     Button switchToDONE;
+    Button changeName;
+
+    public void updateViews() {
+        setDataToViews();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +58,7 @@ public class RoomActivity extends AppCompatActivity {
         initElements();
         setDataToViews();
         setHandlers();
+        PlsDontREPEAT.roomActivity = this;
     }
 
     private void initElements() {
@@ -69,6 +75,7 @@ public class RoomActivity extends AppCompatActivity {
         switchToTODO = findViewById(R.id.button_todo);
         switchToDOING = findViewById(R.id.button_doing);
         switchToDONE = findViewById(R.id.button_done);
+        changeName = findViewById(R.id.button_settings);
     }
 
     private void setDataToViews() {
@@ -110,9 +117,29 @@ public class RoomActivity extends AppCompatActivity {
             }
         });
 
+        nameOfRoomLabel.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                backend.setNewNameOfRoom(s.toString());
+            }
+        });
+
         addTaskButton.setOnClickListener(v -> {
             backend.createNewTask();
             updateTextOnButtons();
+        });
+
+        changeName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                backend.saveNewNameOfRoom();
+            }
         });
 
         recyclerView.addOnItemTouchListener(

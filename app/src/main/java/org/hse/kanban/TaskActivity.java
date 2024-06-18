@@ -29,6 +29,10 @@ public class TaskActivity extends AppCompatActivity {
     private Button deleteTask;
     private Button updateTask;
 
+    public void updateViews() {
+        setDataToViews();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,12 +46,20 @@ public class TaskActivity extends AppCompatActivity {
         initElements();
         setDataToViews();
         setHandlers();
+        PlsDontREPEAT.taskActivity = this;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        PlsDontREPEAT.roomActivity.updateViews();
     }
 
     private void initElements() {
         kanbanDao = DatabaseManager.getInstance(this).getKanbanDao();
         int idTask = getIntent().getExtras().getInt(TASK);
         backend = new TaskActivityBackend(this, kanbanDao, idTask);
+        backend.taskActivity = this;
         headerLabel = findViewById(R.id.label_taskHead);
         statusLabel = findViewById(R.id.label_status);
         deadlineLabel = findViewById(R.id.label_deadline);

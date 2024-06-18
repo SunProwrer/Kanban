@@ -53,6 +53,12 @@ public class TaskChangeActivity extends AppCompatActivity {
         setHandlers();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        PlsDontREPEAT.taskActivity.updateViews();
+    }
+
     private void initElements() {
         kanbanDao = DatabaseManager.getInstance(this).getKanbanDao();
         int idTask = getIntent().getExtras().getInt(TASK);
@@ -74,7 +80,15 @@ public class TaskChangeActivity extends AppCompatActivity {
         bodyLabel.setText(backend.getTaskBody());
         Calendar date = Calendar.getInstance();
         date.setTime(backend.getDeadlineDate());
-        deadlineLabel.init(date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH), (view, year, monthOfYear, dayOfMonth) -> backend.updateDeadline(new Date(year, monthOfYear, dayOfMonth)));
+        deadlineLabel.init(date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
+            @Override
+            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(year + 1900, monthOfYear, dayOfMonth);
+                //backend.updateDeadline(calendar);
+                backend.updateDeadline(year, monthOfYear, dayOfMonth);
+            }
+        });
     }
 
     private void setHandlers() {

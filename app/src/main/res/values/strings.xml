@@ -11,7 +11,7 @@
     <string name="auth_button_registration">Зарегистрироваться</string>
 
     <string name="room_label_name_room">Название комнаты</string>
-    <string name="room_button_room_settings">Настройки комнаты</string>
+    <string name="room_button_room_settings">Изменить название</string>
     <string name="room_button_todo">Бэклог\n(%d)</string>
     <string name="room_button_doing">Делается\n(%d)</string>
     <string name="room_button_done">Готово\n(%d)</string>

@@ -24,6 +24,7 @@ public class RoomActivityBackend {
     private List<TaskEntity> tasks;
     private TaskAdapter adapter;
     private String headerOfNewTask = "";
+    private String newNameOfRoom = "";
     private int status = TaskEntity.TODO;
     public RoomActivityBackend(Context _context, KanbanDao _kanbanDao, String login, String name){
         context = _context;
@@ -32,12 +33,16 @@ public class RoomActivityBackend {
         room = kanbanDao.getRoomByName(name).get(0);
         initTasksList();
         createAdapter();
+        newNameOfRoom = room.name;
     }
 
     public String getNameOfRoom() { return room.name; }
 
     public void setHeaderOfNewTask(String header) {
         headerOfNewTask = header;
+    }
+    public void setNewNameOfRoom(String name) {
+        newNameOfRoom = name;
     }
 
     public TaskAdapter getAdapter() {
@@ -68,6 +73,11 @@ public class RoomActivityBackend {
         intent.putExtra(TaskActivity.TASK, tasks.get(index).idTask);
         context.startActivity(intent);
         adapter.notifyDataSetChanged();
+    }
+
+    public void saveNewNameOfRoom() {
+        room.name = newNameOfRoom;
+        kanbanDao.updateRoom(room);
     }
 
     public void changeStatusToTODO() {

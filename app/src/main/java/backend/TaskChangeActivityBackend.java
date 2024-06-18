@@ -53,6 +53,16 @@ public class TaskChangeActivityBackend extends TaskActivityBackend {
         task.deadline = date;
     } //TODO неработайт
 
+    public void updateDeadline(Calendar calendar) {
+        task.deadline = calendar.getTime();
+    }
+
+    public void updateDeadline(int year, int month, int day) {
+        task.deadline.setYear(year - 1900);
+        task.deadline.setMonth(month);
+        task.deadline.setDate(day);
+    }
+
     public void updateBody(String body) {
         task.body = body;
     }

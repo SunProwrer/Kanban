@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import org.hse.kanban.R;
+import org.hse.kanban.TaskActivity;
 import org.hse.kanban.TaskChangeActivity;
 
 import java.io.Serializable;
@@ -27,6 +28,7 @@ public class TaskActivityBackend implements Serializable {
     private Context context;
     private KanbanDao kanbanDao;
     protected TaskEntity task;
+    public TaskActivity taskActivity;
 
     public TaskActivityBackend(Context _context, KanbanDao _kanbanDao, int idTask) {
         context = _context;
@@ -46,13 +48,13 @@ public class TaskActivityBackend implements Serializable {
         Date date = task.deadline;
         int periodDays = (int)((date.getTime() - new Date().getTime()) / (24 * 60 * 60 * 1000));
         if (periodDays > 7) {
-            String pattern = "yy.MM.dd";
+            String pattern = "dd.MM.yy";
             DateFormat df = new SimpleDateFormat(pattern, Locale.getDefault());
-            Date today = Calendar.getInstance().getTime();
-            return  df.format(today);
+            //Date today = Calendar.getInstance().getTime();
+            return  df.format(date);
         }
 
-        return String.valueOf(periodDays);
+        return "Дней: " + periodDays;
     }
 
     public String getTaskBody() {
